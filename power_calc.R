@@ -1,4 +1,7 @@
 library(ggplot2)
+library(gridExtra)
+library(grid)
+
 
 source("functions.R")
 source("avengeme.R")
@@ -28,7 +31,8 @@ for(i in 1:nrow(a))
 a$lab <- as.character(a$prev)
 a$lab[a$lab == "0.07"] <- "SA"
 a$lab[a$lab == "0.12"] <- "NSSI"
-ggplot(a, aes(x=prop, y=power)) +
+
+p1 <- ggplot(a, aes(x=prop, y=power)) +
 geom_line(aes(colour=as.factor(vg1))) +
 facet_grid(. ~ lab) +
 labs(x="Hypothesised genetic correlation", colour="Variance explained\nin trait 1")
@@ -58,8 +62,15 @@ for(i in 1:nrow(b))
 b$lab <- as.character(b$prev)
 b$lab[b$lab == "0.07"] <- "SA"
 b$lab[b$lab == "0.12"] <- "NSSI"
-ggplot(b, aes(x=prop, y=power)) +
+
+
+p2 <- ggplot(b, aes(x=prop, y=power)) +
 geom_line(aes(colour=as.factor(h21))) +
 facet_grid(. ~ lab) +
 labs(x="Hypothesised genetic correlation", colour="Heritability of trait 1")
 ggsave("gcta_power.pdf", height=4, width=6)
+
+
+pdf("graphs.pdf", width=6, height=4)
+grid.arrange(p1 + labs(y="PGS power", x=NULL), p2 + labs(y="GREML power"), ncol=1)
+dev.off()
