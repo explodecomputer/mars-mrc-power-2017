@@ -39,6 +39,8 @@ labs(x="Hypothesised genetic correlation", colour="Variance explained\nin trait 
 ggsave("pgs_power.pdf", height=4, width=6)
 
 
+polygenescore(nsnp=100000, n=c(100000,8000), vg1=0.077, cov12=0.077 * 0.5, binary=c(FALSE,TRUE),prevalence=0.116, sampling=0.116)$power
+
 b <- expand.grid(
     h21=c(0.1, 0.3, 0.5, 0.7),  
     prop=seq(0, 1, 0.01),
@@ -74,3 +76,27 @@ ggsave("gcta_power.pdf", height=4, width=6)
 pdf("graphs.pdf", width=6, height=4)
 grid.arrange(p1 + labs(y="PGS power", x=NULL), p2 + labs(y="GREML power"), ncol=1)
 dev.off()
+
+
+calcBiQtCc(
+    n=5000,
+    ncase=5000 * 0.116,
+    ncontrol=5000 * (1 - 0.116),
+    hsq1=0.3,
+    hsq2=0.4,
+    K=0.116,
+    rg=0.46,
+    overlap=TRUE
+)$power
+
+calcBiQtCc(
+    n=5000,
+    ncase=5000 * 0.07,
+    ncontrol=5000 * (1 - 0.07),
+    hsq1=0.3,
+    hsq2=0.4,
+    K=0.116,
+    rg=0.53,
+    overlap=TRUE
+)$power
+
